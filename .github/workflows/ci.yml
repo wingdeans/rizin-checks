@@ -1,0 +1,21 @@
+name: run-rizin-checks
+on: push
+jobs:
+  run-checks:
+    name: rizin-checks
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install deps
+      run: |
+        sudo apt-get update
+        sudo apt-get --assume-yes install python3
+        pip3 install --user meson ninja
+    - name: Checkout Rizin
+      uses: actions/checkout@v3
+      with:
+        repository: rizinorg/rizin
+        path: rizin
+    - name: Build Rizin
+      run: |
+        meson build && ninja -C build
+      working-directory: rizin
